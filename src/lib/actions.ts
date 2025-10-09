@@ -1,5 +1,5 @@
 "use server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import jokes from "./joke-data";
 import { JokeType } from "./joke-data";
 
@@ -8,5 +8,9 @@ export const addJoke = async (formData: FormData) => {
   if (!joke?.trim()) return;
   const newJoke: JokeType = { id: Date.now(), joke };
   jokes.push(newJoke);
-  revalidateTag("jokes");
+  revalidatePath("/jokes");
+};
+
+export const getJokes = async () => {
+  return jokes;
 };

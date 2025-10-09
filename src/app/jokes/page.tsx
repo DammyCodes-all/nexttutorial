@@ -1,14 +1,17 @@
 import { JokeForm } from "./_components/jokeForm";
 import { Joke } from "./_components/joke";
 import type { JokeType } from "@/lib/joke-data";
-export const dynamic = "force-dynamic";
+import { getJokes } from "@/lib/actions";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Jokes",
+  description:
+    "A page where you can add jokes, view previous jokes implemented via Next.js route handlers and server functions",
+};
+// export const dynamic = "force-dynamic";
 export default async function JokesPage() {
-  const res = await fetch("http://localhost:3000/api/jokes", {
-    cache: "no-store",
-    next: { tags: ["jokes"] },
-  });
-  const jokes: JokeType[] = await res.json();
+  const jokes: JokeType[] = await getJokes();
   return (
     <div className="w-full h-full flex flex-col gap-2 justify-center items-center">
       <JokeForm />
