@@ -1,7 +1,17 @@
 import Image from "next/image";
 import { images } from "../images";
 
-export default async ({ params }: { params: Promise<{ imageId: string }> }) => {
+export const generateStaticParams = async () => {
+  return images
+    .map((img) => ({ imageId: img.id.toString() }))
+    .filter((imgID) => imgID.imageId !== "6");
+};
+
+export default async function DynamicImage({
+  params,
+}: {
+  params: Promise<{ imageId: string }>;
+}) {
   const { imageId } = await params;
   const image = images.find((image) => image.id === Number(imageId));
   return (
@@ -10,4 +20,4 @@ export default async ({ params }: { params: Promise<{ imageId: string }> }) => {
       <p>{`Image ${imageId}`}</p>
     </div>
   );
-};
+}

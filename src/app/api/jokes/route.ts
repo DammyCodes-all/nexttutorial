@@ -1,6 +1,5 @@
 import jokes, { JokeType } from "@/lib/joke-data";
 import type { NextRequest } from "next/server";
-import { headers } from "next/headers";
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const id = searchParams.get("id");

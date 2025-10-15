@@ -1,4 +1,4 @@
-import { Agbalumo, Roboto, Urbanist } from "next/font/google";
+import { Roboto, Urbanist } from "next/font/google";
 
 // export const agbalumo = Agbalumo({
 //   subsets: ["latin", "ethiopic"],

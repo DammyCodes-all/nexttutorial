@@ -13,11 +13,11 @@ export const generateMetadata = async ({
   };
 };
 
-export default async ({
+export default async function ProductPage({
   params,
 }: {
   params: Promise<{ productId: string }>;
-}) => {
+}) {
   const { productId } = await params;
   return <p>Product iPhone {Number(productId)}</p>;
-};
+}

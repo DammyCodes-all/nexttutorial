@@ -6,6 +6,8 @@ export const metadata: Metadata = {
     "The page that shows all the products for This nextjs tutorial!!",
 };
 
-export default () => {
+const Products = () => {
   return <p>Products Page</p>;
 };
+
+export default Products;

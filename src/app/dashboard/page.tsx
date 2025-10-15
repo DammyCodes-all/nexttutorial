@@ -4,10 +4,10 @@ export const metadata: Metadata = {
   title: "About page for the next tutorial",
 };
 
-export default () => {
+export default function Dashboard() {
   return (
     <>
       <p>This is the Dashboard</p>
     </>
   );
-};
+}

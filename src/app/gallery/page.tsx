@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { images } from "./images";
 import Link from "next/link";
-export default () => {
+export default async function GalleryPage() {
   return (
     <>
       <div className="flex flex-col gap-2 w-full h-full mt-10">
@@ -22,4 +22,4 @@ export default () => {
       </div>
     </>
   );
-};
+}
