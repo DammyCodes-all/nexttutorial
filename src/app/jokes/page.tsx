@@ -3,6 +3,7 @@ import type { JokeType } from "@/lib/joke-data";
 import { getJokes } from "@/lib/actions";
 import { Metadata } from "next";
 import { JokeWrapper } from "./_components/joke-wrapper";
+import { auth } from "@/lib/auth";
 
 // export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 // export const dynamic = "force-dynamic";
 export default async function JokesPage() {
   const jokes: JokeType[] = await getJokes();
+  // const res = await auth.api.getSession();
   return (
     <div className="w-full h-full flex flex-col gap-2 justify-center items-center">
       <JokeForm />

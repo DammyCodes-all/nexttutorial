@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { roboto } from "@/lib/fonts";
+import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -18,14 +19,14 @@ export const NavBar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur supports-[backdrop-filter]:bg-background/70 border-b border-border">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/70 shadow-sm">
       <nav
-        className={`mx-auto max-w-5xl flex items-center justify-between px-4 h-14 ${roboto.className}`}
+        className={`mx-auto max-w-6xl flex items-center justify-between px-4 h-14 ${roboto.className}`}
         aria-label="Main navigation"
       >
         <Link
           href="/"
-          className="font-semibold text-lg bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+          className="font-semibold text-lg bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
         >
           NextTutorial
         </Link>
@@ -43,7 +44,7 @@ export const NavBar = () => {
                       active
                         ? "bg-primary text-primary-foreground shadow-sm"
                         : "text-foreground/80 hover:text-foreground hover:bg-muted"
-                    }`}
+                    } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`}
                   aria-current={active ? "page" : undefined}
                 >
                   {l.label}
@@ -53,12 +54,21 @@ export const NavBar = () => {
           })}
         </ul>
 
+        {/* Desktop actions */}
+        <div className="hidden md:flex items-center gap-2">
+          <Link href="/login" aria-label="Sign in">
+            <Button size="sm" className="rounded-full px-4 shadow-sm">
+              Sign in
+            </Button>
+          </Link>
+        </div>
+
         {/* Mobile toggle */}
         <button
           type="button"
-          className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-border text-foreground/80 hover:text-foreground hover:bg-muted transition"
+          className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-border text-foreground/80 hover:text-foreground hover:bg-muted transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-label="Toggle menu"
-          aria-expanded={open}
+          // aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
         >
           <span className="sr-only">Menu</span>
@@ -103,7 +113,7 @@ export const NavBar = () => {
                         active
                           ? "bg-primary text-primary-foreground"
                           : "text-foreground/80 hover:text-foreground hover:bg-muted"
-                      }`}
+                      } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`}
                     aria-current={active ? "page" : undefined}
                   >
                     {l.label}
@@ -111,6 +121,13 @@ export const NavBar = () => {
                 </li>
               );
             })}
+            <li className="pt-2">
+              <Link href="/login" onClick={() => setOpen(false)}>
+                <Button className="w-full rounded-full shadow-sm">
+                  Sign in
+                </Button>
+              </Link>
+            </li>
           </ul>
         </div>
       )}
