@@ -7,5 +7,6 @@ export const signUp = async (formData: FormData) => {
   // try
   const res = await auth.api.signInEmail({
     body: { email, password, callbackURL: "/dashboard" },
+    asResponse: true,
   });
 };
