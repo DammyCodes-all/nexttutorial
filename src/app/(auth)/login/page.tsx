@@ -14,15 +14,18 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") || "/";
   const handleLogin = async () => {
     const { data, error } = await authClient.signIn.email({
       email,
       password,
-      callbackURL: "/jokes",
+      callbackURL: next,
     });
   };
   return (

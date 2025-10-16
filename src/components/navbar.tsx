@@ -5,6 +5,18 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { roboto } from "@/lib/fonts";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ChevronDown, LogOut, Settings, UserRound } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -14,10 +26,24 @@ const NAV_LINKS = [
   { href: "/jokes", label: "Jokes" },
 ];
 
+type NavBarProps = {
+  user?: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+    emailVerified: boolean;
+    name: string;
+    image?: string | null;
+  } | null;
+};
+
 export const NavBar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/70 shadow-sm">
       <nav
@@ -56,11 +82,67 @@ export const NavBar = () => {
 
         {/* Desktop actions */}
         <div className="hidden md:flex items-center gap-2">
-          <Link href="/login" aria-label="Sign in">
-            <Button size="sm" className="rounded-full px-4 shadow-sm">
-              Sign in
-            </Button>
-          </Link>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 rounded-full px-2 pr-3 hover:bg-muted"
+                >
+                  <Avatar className="h-8 w-8 ">
+                    <AvatarImage
+                      src={user.image ?? undefined}
+                      alt={user.name}
+                    />
+                    <AvatarFallback className="bg-muted  text-foreground">
+                      {user.name.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium">{user.name}</span>
+                  <ChevronDown />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="flex flex-col gap-0.5">
+                  <span className="text-sm font-semibold">{user.name}</span>
+                  <span className="text-xs text-muted-foreground truncate">
+                    {user.email}
+                  </span>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="flex items-center gap-2">
+                  <UserRound className="h-4 w-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="flex items-center gap-2 text-destructive focus:text-destructive"
+                  onClick={async function signOut() {
+                    await authClient.signOut({
+                      fetchOptions: {
+                        onSuccess: () => {
+                          router.push("/login");
+                        },
+                      },
+                    });
+                  }}
+                >
+                  <LogOut className="h-4 w-4" />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href="/login" aria-label="Sign in">
+              <Button size="sm" className="rounded-full px-4 shadow-sm">
+                Sign in
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -100,6 +182,22 @@ export const NavBar = () => {
           aria-modal="false"
         >
           <ul className="flex flex-col px-4 py-3 gap-1">
+            {user && (
+              <li className="flex items-center gap-3 px-3 py-2 rounded-md bg-muted/80">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={user.image ?? undefined} alt={user.name} />
+                  <AvatarFallback>
+                    {user.name.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{user.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user.email}
+                  </p>
+                </div>
+              </li>
+            )}
             {NAV_LINKS.map((l) => {
               const active =
                 l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
@@ -122,11 +220,40 @@ export const NavBar = () => {
               );
             })}
             <li className="pt-2">
-              <Link href="/login" onClick={() => setOpen(false)}>
-                <Button className="w-full rounded-full shadow-sm">
-                  Sign in
-                </Button>
-              </Link>
+              {user ? (
+                <div className="flex flex-col gap-1">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                  >
+                    <Settings className="h-4 w-4" />
+                    Settings
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="w-full justify-start gap-2"
+                    onClick={async function signOut(e) {
+                      e.preventDefault();
+                      await authClient.signOut({
+                        fetchOptions: {
+                          onSuccess: () => {
+                            router.push("/login");
+                          },
+                        },
+                      });
+                    }}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Log out
+                  </Button>
+                </div>
+              ) : (
+                <Link href="/login" onClick={() => setOpen(false)}>
+                  <Button className="w-full rounded-full shadow-sm">
+                    Sign in
+                  </Button>
+                </Link>
+              )}
             </li>
           </ul>
         </div>

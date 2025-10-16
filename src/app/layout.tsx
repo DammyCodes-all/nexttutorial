@@ -5,8 +5,7 @@ export const metadata: Metadata = {
   title: { default: "NextJs tutorial", template: "%s | nextTut" },
   description: "Empty for now",
 };
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
