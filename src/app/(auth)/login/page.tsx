@@ -45,7 +45,13 @@ function LoginForm() {
       callbackURL: next,
     });
   };
-
+  const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      newUserCallbackURL: "/dashboard",
+      callbackURL: "/jokes",
+    });
+  };
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/40 flex items-center justify-center p-6">
       <Card className="w-full max-w-md shadow-lg">
@@ -55,7 +61,11 @@ function LoginForm() {
         </CardHeader>
 
         <CardContent className="grid gap-6">
-          <Button variant="outline" className="w-full h-11">
+          <Button
+            variant="outline"
+            className="w-full h-11"
+            onClick={handleGoogleSignIn}
+          >
             <GoogleIcon className="mr-2 h-5 w-5" />
             Continue with Google
           </Button>
@@ -121,7 +131,7 @@ function LoginForm() {
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
-              href="/auth/signin"
+              href="/signin"
               className="text-foreground underline underline-offset-4"
             >
               Create one
