@@ -13,21 +13,39 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          Loading…
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
+  "use client";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/";
+
   const handleLogin = async () => {
-    const { data, error } = await authClient.signIn.email({
+    await authClient.signIn.email({
       email,
       password,
       callbackURL: next,
     });
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/40 flex items-center justify-center p-6">
       <Card className="w-full max-w-md shadow-lg">
@@ -114,6 +132,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" {...props}>

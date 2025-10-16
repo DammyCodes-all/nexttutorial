@@ -12,7 +12,6 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { signUp } from "@/lib/actions/auth-actions";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 
@@ -22,7 +21,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
 
   const handleSignUp = async () => {
-    const { data, error } = await authClient.signUp.email({
+    const { error } = await authClient.signUp.email({
       email,
       password,
       name,

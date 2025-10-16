@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { urbanist } from "@/lib/fonts";
 import { ChevronRight, Edit, Trash } from "lucide-react";
 import type { JokeType } from "@/lib/joke-data";
-import { deleteJoke } from "@/lib/actions";
 type Jokeprops = {
   joke: JokeType;
   deleteFn: (id: string, formData: FormData) => void;

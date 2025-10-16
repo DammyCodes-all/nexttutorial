@@ -26,18 +26,6 @@ const NAV_LINKS = [
   { href: "/jokes", label: "Jokes" },
 ];
 
-type NavBarProps = {
-  user?: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    email: string;
-    emailVerified: boolean;
-    name: string;
-    image?: string | null;
-  } | null;
-};
-
 export const NavBar = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
